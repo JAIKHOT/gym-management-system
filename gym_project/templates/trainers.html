@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Trainers — Gym Manager{% endblock %}
+{% block content %}
+
+<h3>Trainers</h3>
+
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white">
+    <strong>🏋️ Add New Trainer</strong>
+  </div>
+  <div class="card-body">
+    <form action="/add_trainer" method="POST" class="row g-2">
+      <div class="col-md-3">
+        <input name="name" class="form-control"
+               placeholder="Full name" required maxlength="50">
+      </div>
+      <div class="col-md-4">
+        <input name="specialization" class="form-control"
+               placeholder="Specialization (e.g. Yoga)" required maxlength="40">
+      </div>
+      <div class="col-md-3">
+        <input name="phone" class="form-control"
+               placeholder="Phone (10 digits)" required
+               pattern="[0-9]{10}" maxlength="10">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-success w-100">Add Trainer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th><th>Name</th><th>Specialization</th><th>Phone</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in trainers %}
+    <tr>
+      <td>{{ t.trainer_id }}</td>
+      <td>{{ t.name }}</td>
+      <td>{{ t.specialization }}</td>
+      <td>{{ t.phone }}</td>
+      <td>
+        <a href="/delete_trainer/{{ t.trainer_id }}"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Delete trainer {{ t.name }}? Members assigned to this trainer will be unassigned.')">
+          Delete
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

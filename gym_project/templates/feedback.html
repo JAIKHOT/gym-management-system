@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Member Feedback <small class="text-muted">(MongoDB)</small></h3>
+
+<div class="alert alert-success">
+  <strong>Average Rating:</strong> {{ average }} / 5
+</div>
+
+<!-- Add Feedback Form -->
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white">
+    <strong>⭐ Submit Feedback</strong>
+  </div>
+  <div class="card-body">
+    <form action="/add_feedback" method="POST" class="row g-2">
+      <div class="col-md-3">
+        <select name="member_id" class="form-select" required>
+          <option value="">Select member</option>
+          {% for m in members %}
+            <option value="{{ m.member_id }}">{{ m.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select name="rating" class="form-select" required>
+          <option value="">Rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+          <option value="4">⭐⭐⭐⭐ (4)</option>
+          <option value="3">⭐⭐⭐ (3)</option>
+          <option value="2">⭐⭐ (2)</option>
+          <option value="1">⭐ (1)</option>
+        </select>
+      </div>
+      <div class="col-md-5">
+        <input name="comments" class="form-control"
+               placeholder="Your comments..." required>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-success w-100">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Feedback Table -->
+<table class="table table-bordered">
+  <thead class="table-dark">
+    <tr><th>Member ID</th><th>Rating</th><th>Comments</th><th>Date</th></tr>
+  </thead>
+  <tbody>
+    {% for f in feedback %}
+    <tr>
+      <td>{{ f.member_id }}</td>
+      <td>{{ '⭐' * f.rating }} ({{ f.rating }})</td>
+      <td>{{ f.comments }}</td>
+      <td>{{ f.date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

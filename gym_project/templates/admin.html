@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>⚙️ Admin Panel</h3>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card text-bg-primary">
+      <div class="card-body">
+        <h6>Revenue — {{ current_month }}</h6>
+        <h2>₹{{ revenue.total }}</h2>
+        <small>{{ revenue.cnt }} payment(s)</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card text-bg-warning">
+      <div class="card-body">
+        <h6>Run Procedures</h6>
+        <a href="/run_expire" class="btn btn-dark btn-sm mt-2">
+          ▶ Run expire_memberships()
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h5>Recent Audit Log</h5>
+<table class="table table-sm table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th><th>Action</th><th>Table</th>
+      <th>Record</th><th>Description</th><th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for l in logs %}
+    <tr>
+      <td>{{ l.audit_id }}</td>
+      <td>
+        {% if l.action_type == 'INSERT' %}🟢
+        {% elif l.action_type == 'DELETE' %}🔴
+        {% elif l.action_type == 'PROCEDURE' %}⚙️
+        {% else %}⚪{% endif %}
+        {{ l.action_type }}
+      </td>
+      <td>{{ l.table_name }}</td>
+      <td>{{ l.record_id or '-' }}</td>
+      <td>{{ l.description }}</td>
+      <td>{{ l.action_time }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

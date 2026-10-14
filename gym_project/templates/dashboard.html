@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">📊 Dashboard</h2>
+
+<!-- Row 1: MySQL Stats -->
+<h5 class="text-muted">From MySQL</h5>
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card text-bg-primary">
+      <div class="card-body">
+        <h6>Total Members</h6>
+        <h2>{{ total_members }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-bg-success">
+      <div class="card-body">
+        <h6>Active Members</h6>
+        <h2>{{ active_members }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-bg-warning">
+      <div class="card-body">
+        <h6>Total Revenue</h6>
+        <h2>₹{{ total_revenue }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-bg-info">
+      <div class="card-body">
+        <h6>Plans Available</h6>
+        <h2>{{ total_plans }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card text-bg-secondary">
+      <div class="card-body">
+        <h6>Total Trainers</h6>
+        <h2>{{ total_trainers }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2: MongoDB Stats -->
+<h5 class="text-muted">From MongoDB</h5>
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card text-bg-dark">
+      <div class="card-body">
+        <h6>Total Feedback Received</h6>
+        <h2>{{ total_feedback }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card text-bg-dark">
+      <div class="card-body">
+        <h6>Average Rating</h6>
+        <h2>{{ avg_rating }} / 5</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

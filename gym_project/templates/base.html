@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Gym Manager{% endblock %}</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-3">
+  <a class="navbar-brand" href="/">🏋️ Gym Manager</a>
+  <div>
+    <a class="btn btn-outline-light btn-sm" href="/">Dashboard</a>
+    <a class="btn btn-outline-light btn-sm" href="/members">Members</a>
+    <a class="btn btn-outline-light btn-sm" href="/plans">Plans</a>
+    <a class="btn btn-outline-light btn-sm" href="/trainers">Trainers</a>
+    <a class="btn btn-outline-light btn-sm" href="/payments">Payments</a>
+    <a class="btn btn-outline-light btn-sm" href="/workouts">Workouts</a>
+    <a class="btn btn-outline-light btn-sm" href="/presets">Presets</a>
+    <a class="btn btn-outline-light btn-sm" href="/feedback">Feedback</a>
+    <a class="btn btn-warning btn-sm" href="/admin">⚙️ Admin</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Workout Plans <small class="text-muted">(MongoDB)</small></h3>
+
+<!-- Assign Workout Form -->
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white">
+    <strong>💪 Assign Workout Plan</strong>
+  </div>
+  <div class="card-body">
+    <form action="/add_workout" method="POST" class="row g-2">
+
+      <div class="col-md-2">
+        <select name="member_id" class="form-select" required>
+          <option value="">Member</option>
+          {% for m in members %}
+            <option value="{{ m.member_id }}">{{ m.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select name="trainer_id" class="form-select" required>
+          <option value="">Trainer</option>
+          {% for t in trainers %}
+            <option value="{{ t.trainer_id }}">{{ t.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select name="goal" id="goalSelect" class="form-select" required>
+          <option value="">Choose goal</option>
+          {% for g in goals %}
+            <option value="{{ g }}">{{ g }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select name="day" class="form-select" required>
+          <option value="">Day</option>
+          <option value="Mon">Monday</option>
+          <option value="Tue">Tuesday</option>
+          <option value="Wed">Wednesday</option>
+          <option value="Thu">Thursday</option>
+          <option value="Fri">Friday</option>
+          <option value="Sat">Saturday</option>
+          <option value="Sun">Sunday</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <input name="exercises" id="exerciseInput" class="form-control"
+               placeholder="Auto-fills on goal selection" required>
+        <small id="exerciseHint" class="text-success" style="display:none;">
+          ✅ Preset loaded from database
+        </small>
+      </div>
+
+      <div class="col-md-1">
+        <button class="btn btn-success w-100">Add</button>
+      </div>
+
+    </form>
+    <small class="text-muted">
+      Pick a goal — exercises auto-fill from MongoDB presets. You can edit them freely.
+    </small>
+  </div>
+</div>
+
+<!-- Workout Cards -->
+{% for w in plans %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">
+        Member ID: {{ w.member_id }} — Goal: {{ w.goal }}
+      </h5>
+      <p class="text-muted mb-2">
+        Trainer ID: {{ w.trainer_id }} | Created: {{ w.created_at }}
+      </p>
+      <ul>
+        {% for day in w.plan %}
+          <li>
+            <strong>{{ day.day }}:</strong>
+            {{ day.exercises|join(', ') }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% else %}
+  <div class="alert alert-warning">No workout plans yet.</div>
+{% endfor %}
+
+<script>
+  document.getElementById("goalSelect").addEventListener("change", function() {
+    const goal = this.value;
+    const exerciseInput = document.getElementById("exerciseInput");
+    const hint = document.getElementById("exerciseHint");
+
+    if (!goal) {
+      exerciseInput.value = "";
+      hint.style.display = "none";
+      return;
+    }
+
+    fetch(`/get_presets/${encodeURIComponent(goal)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.exercises && data.exercises.length > 0) {
+          exerciseInput.value = data.exercises.join(", ");
+          hint.textContent = `✅ Preset loaded from database (${data.difficulty})`;
+          hint.style.display = "block";
+        } else {
+          exerciseInput.value = "";
+          hint.style.display = "none";
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching presets:", error);
+        hint.style.display = "none";
+      });
+  });
+</script>
+
+{% endblock %}
